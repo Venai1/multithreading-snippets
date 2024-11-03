@@ -14,18 +14,15 @@ int NUM_THREADS = 7;
 pthread_mutex_t count_mutex;
 pthread_cond_t count_threshold_cv;
 
-// Thread function
 void* inc_count(void* arg) {
     int thread_id = *(int*)arg;
     
-    // Print message
     printf("Hello from thread %d!\n", thread_id+1);
    
     pthread_mutex_lock(&count_mutex);
     count++;
 
     if (count == 2) {
-        // printf("inc_count threshold recieved\n");
         pthread_cond_broadcast(&count_threshold_cv);
         // printf("Sent signal from thread %d\n", thread_id+1);
         printf("=========\n");
@@ -33,7 +30,7 @@ void* inc_count(void* arg) {
 
     pthread_mutex_unlock(&count_mutex);
 
-    free(arg);  // Free the allocated thread ID
+    free(arg); 
     pthread_exit(NULL);
 }
 
@@ -46,7 +43,6 @@ void* watch_count(void* arg) {
         pthread_cond_wait(&count_threshold_cv, &count_mutex);
     }
     
-    // Print message
     printf("Hello from thread %d!\n", thread_id+1);
    
     pthread_mutex_unlock(&count_mutex);
@@ -74,7 +70,7 @@ int main() {
             if (i != 2-1) pthread_create(&threads[i], &attr, watch_count, tid);
         }
         
-        pthread_attr_destroy(&attr);  // Clean up attribute
+        pthread_attr_destroy(&attr);
         
     }
     
@@ -83,7 +79,6 @@ int main() {
         pthread_join(threads[i], NULL);
     }
     
-    // Clean up
     pthread_mutex_destroy(&count_mutex);
     pthread_cond_destroy(&count_threshold_cv);
 

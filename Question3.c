@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// clear && gcc -o Question3 Question3.c -pthread && ./Question3
+
 int counter = 0;
 int odd_even = 0;
 pthread_mutex_t mutex;
@@ -72,7 +74,7 @@ int main() {
     printf("Enter the number of elements in the array: ");
     while (scanf("%d", &arrLength) != 1 || arrLength <= 0) {
         // Clear the input buffer
-        while (getchar() != '\n'); // Discard invalid input
+        while (getchar() != '\n');
         printf("Invalid input. Please enter a positive integer: ");
     }
 
@@ -95,8 +97,8 @@ int main() {
         pthread_attr_init(&attr);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
         
-        int* threadID = malloc(sizeof(int));  // Allocate memory for thread argument
-        *threadID = i;  // Assign even index
+        int* threadID = malloc(sizeof(int));  
+        *threadID = i; 
 
         pthread_create(&threads[tid], &attr, even_odd_sort, threadID);
         pthread_attr_destroy(&attr);  // Clean up attribute
@@ -117,7 +119,6 @@ int main() {
 
      printf("\n===================\n");
 
-    // Clean up
-    free(arr1); // Don't forget to free the allocated array
+    free(arr1);
     return 0;
 }

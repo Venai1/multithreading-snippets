@@ -1,7 +1,9 @@
-#include <pthread.h> // All pthreads programs must include this!
+#include <pthread.h> 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+// clear && gcc -o Question1 Question1.c -pthread && ./Question1
 
 bool isSorted = true;
 int *arr1; 
@@ -38,7 +40,6 @@ int main(int argc, char** argv) {
         pthread_create(&workers[i], &attr[i], compareNext, tid); 
     }
 
-    // Master thread waits on each launched thread to finish
     for (int i = 0; i < arrLength-1; ++i) {
         pthread_join(workers[i], NULL);
         printf("Thread #%i joined!\n", i);
@@ -53,13 +54,12 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-// Each thread executes this function
+
 void* compareNext(void* tid) {
-    int threadid = *(int*) tid;  // Dereference pointer to get the int value
+    int threadid = *(int*) tid;  
     free(tid);  
     if (arr1[threadid] > arr1[threadid+1]){
       isSorted = false;
     }
     pthread_exit(0);
 }
-// 
